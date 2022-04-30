@@ -176,7 +176,7 @@ ReactDOMServer.renderToReadableStream(<Html lang="en">
 
 5. Next, React sents a small inlined script tag to hide the fallback and reveal the content (again, pseudo code): 
 
-```js
+```html
 <script>
 const fallbackContainer = document.getElementById('suspense-1-fallback')
 const contentContainer = document.getElementById('suspense-1-content')
@@ -219,7 +219,7 @@ When rendering the style tag, we can simply tell the CSS-in-JS library to export
 <style id="stitches">???</style>
 ```
 
-```
+```jsx
 const UsernameContainer = styled('span', {
   fontSize: '2rem',
   variants: {
@@ -265,5 +265,5 @@ Personally I think this will be a nice way to solve the problem. When there's an
 
 It's hard to get a conclusion from this, just one personal take: static is the path to optimizations in a highly dynamic system.
 
-Static = { static, static analyzable, immutability, purity }  
-Optimizations = { mental load, software performance, architecture simplicity }
+Static = {'{ static, static analyzable, immutability, purity }'}  
+Optimizations = {'{ mental load, software performance, architecture simplicity }'}
