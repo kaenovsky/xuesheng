@@ -1,6 +1,7 @@
-import "nextra-theme-blog/style.css"
 import Head from "next/head"
+import Script from "next/script"
 
+import "nextra-theme-blog/style.css"
 import "../styles/main.css"
 
 export default function Nextra({ Component, pageProps }) {
@@ -23,11 +24,11 @@ export default function Nextra({ Component, pageProps }) {
         />
       </Head>
       {getLayout(<Component {...pageProps} />)}
-      <script
-        async
+      <Script
         src="https://www.googletagmanager.com/gtag/js?id=UA-55182697-1"
-      ></script>
-      <script
+        async
+      />
+      <Script
         dangerouslySetInnerHTML={{
           __html: `
       window.dataLayer=window.dataLayer||[]
