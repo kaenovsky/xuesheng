@@ -1,0 +1,269 @@
+---
+title: Server-side Rendering, Streaming, and CSS-in-JS
+date: 2022/4/30
+description: How does CSS-in-JS work with SSR, and streaming SSR?
+tag: code
+author: Shu
+---
+
+# Server-side Rendering, Streaming, and CSS-in-JS
+
+_This originated from a document I wrote at Vercel, but it worth sharing based on all the confusions I've heard from the community regarding this topic._
+
+How does CSS-in-JS exactly work with SSR, and streaming SSR? Let's take [Next.js](https://nextjs.org) and [Stitches](https://stitches.dev) as an example and dive into the details in this article. Note that this is not targeting a specific framework or library, it's a general architecture discussion.
+
+OK. Say you have these two components to render a simple page, and it uses CSS-in-JS to style some parts of the content:
+
+```jsx
+// page.jsx
+export default function Page () {
+  return <h1>
+    Hello, <User/>
+  </h1>
+}
+```
+
+```jsx
+// user.jsx
+
+// Stitches
+const UsernameContainer = styled('span', {
+  fontSize: '2rem',
+  variants: {
+    type: {
+      admin: { color: 'red' }
+    }
+  }
+})
+
+function User() {
+  // Let's assume that you already have the user data from somewhere, probably `getStaticProps`.
+  const user = { name: 'John Doe', type: 'admin' }
+
+  return <UsernameContainer type={user.type}>
+    {user.name}
+  </UsernameContainer>
+}
+```
+
+This application renders a simple "Hello, John Doe" heading, the user name will also be in red because it matches the `type="admin"` variant.
+
+## Server-side Rendering
+
+During SSR, Next.js:
+
+1. Renders the page to a string (`ReactDOMServer.renderToString(<Page/>)`). The gives us a result like:
+
+```jsx
+<h1>Hello, <span className="stitches-xyz stitches-xyz-type-admin">John Doe</span></h1>
+```
+
+2. During step 1, Stitches **knows** which components were rendered, what styles were used and what classname/variant hashes were generated.
+3. Renders the full HTML "shell" element (`page/_document.js`):
+
+```jsx
+<Html lang="en">
+  <Head>
+    <style id="stitches" dangerouslySetInnerHTML={{ __html: stitches.getCssText() }} />
+  </Head>
+  <body>
+    <div id="_next">__PLACEHOLDER__</div>
+  </body>
+</Html>
+```
+
+4. Since Stitches knows exactly what CSS this page is using (as step 2), in step 3 it returns that via `getCssText()`. So the rendered HTML of step 3 will be:
+
+```html
+<html lang="en">
+  <head>
+    <style id="stitches">
+      .stitches-xyz {
+        font-size: 2rem;
+      }
+      .stitches-xyz-type-admin {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="_next">__PLACEHOLDER__</div>
+  </body>
+</html>
+```
+
+5. In the last step, Next.js replaces `__PLACEHOLDER__` above with the generated content from step 1 `<h1>Hello, <span className="stitches-xyz stitches-xyz-type-admin">John Doe</span></h1>`, so the everything is finished and all styles are server-side rendered.
+6. Send the result to the browser.
+
+Similarly if the user isn't an admin, the output won't contain `stitches-xyz-type-admin` and related style.
+
+This 2-pass rendering strategy ensures that all the needed information inside the page `<body>` will be collected, so it can then insert them into the page `<head>`.
+
+## Streaming SSR
+
+"Streaming" means the HTML will be intentionally sent to the client piece by piece, rather than all at once. The client can render the recieved parts and the server can continue working on the remaining parts.
+
+With the same example, if we use Suspense and enable streaming (`ReactDOMServer.renderToReadableStream`):
+
+```jsx
+// page.jsx
+export default function Page () {
+  return <h1>
+    Hello, <Suspense fallback="loading...">
+      <User/>
+    </Suspense>
+  </h1>
+}
+```
+
+```jsx
+// user.jsx
+
+// Stitches
+const UsernameContainer = styled('span', {
+  fontSize: '2rem',
+  variants: {
+    type: {
+      admin: { color: 'red' }
+    }
+  }
+})
+
+function User() {
+  // Let's do a Suspense-based data fetching here!
+  const user = readUser()
+
+  return <UsernameContainer type={user.type}>
+    {user.name}
+  </UsernameContainer>
+}
+```
+
+...and it becomes a lot more trick to render the correct styles. Here's what happens (_simplified version_):
+
+1. We renders the **full** page, including the "shell", to a stream. Let's use `???` as a temporary placeholder for the style:
+
+```jsx
+ReactDOMServer.renderToReadableStream(<Html lang="en">
+  <Head>
+    <style id="stitches" dangerouslySetInnerHTML={{ __html: '???' }} />
+  </Head>
+  <body>
+    <div id="_next">
+      <Page/>
+    </div>
+  </body>
+</Html>)
+```
+
+2. At the beginning, things are rendered easily, and this will be sent to the browser **immediately**:
+
+```jsx
+<html lang="en"><head><style id="stitches">???</style></head><body><div id="_next"><h1>Hello,
+```
+
+3. React hits the Suspense boundary, and sents the fallback element `<div id="suspense-1-fallback">loading...</div>` to the stream, and waits. At this point the user can already see "Hello, loading..." on their screen.
+
+4. (Waiting)
+
+5. ...`readUser()` finishes and the Suspense boundary resolves, and React **needs** to replace the fallback element with the actual content. However, the fallback is already sent to the client and being displayed. So here what React can do is to also append the content to the stream, with `hidden`: 
+
+```html
+<div hidden id="suspense-1-content"><span className="stitches-xyz stitches-xyz-type-admin">John Doe</span></div>
+```
+
+...and same Stitches class names as before. It needs to be `hidden` because otherwise, at this momenet both fallback and content will be displayed.
+
+5. Next, React sents a small inlined script tag to hide the fallback and reveal the content (again, pseudo code): 
+
+```js
+<script>
+const fallbackContainer = document.getElementById('suspense-1-fallback')
+const contentContainer = document.getElementById('suspense-1-content')
+
+moveTo(contentContainer, fallbackContainer) // Move "contentContainer" to the position of "fallbackContainer" in DOM
+remove(fallbackContainer)                   // Remove "fallbackContainer"
+makeVisible(contentContainer)               // Get rid of the `hidden` attribute of "contentContainer"
+</script>
+```
+
+Then, the browser can immediately execute the script and the content replaces the fallback on screen.
+
+6. React appends the remaining HTML to the stream: `</h1></div></body></html>`.
+
+The key of streaming is step 3, 4, 5. The full HTML, when finished, will be like this:
+
+```html
+<html lang="en"><head><style id="stitches">???</style></head><body><div id="_next"><h1>Hello,
+<div id="suspense-1-fallback">loading...</div>
+<div hidden id="suspense-1-content"><span className="stitches-xyz stitches-xyz-type-admin">John Doe</span></div>
+<script>const fallbackContainer = document.getElementById('suspense-1-fallback');...</script>
+</h1></div></body></html>
+```
+
+Which is totally valid. Browser receives and executes each line in order.
+
+### The Problems
+
+But what is that "???"? As you can see, the biggest problem here is, you **can't** know what styles are used by the page in step 2 (`<head>`), before finishing the Suspense boundary (step 4). And when step 4 finishes, `<head>` has been sent out already. We can't insert it back with another render like the non-SSR case.
+
+The problem is that CSS-in-JS styles can be very dynamic. They're unknown until render and it's tricky to do static analysis for them.
+
+### Solutions
+
+#### Include All Possiblilities
+
+When rendering the style tag, we can simply tell the CSS-in-JS library to export all the possible styles, even if they might not end up being used in the final tree:
+
+```html
+<style id="stitches">???</style>
+```
+
+```
+const UsernameContainer = styled('span', {
+  fontSize: '2rem',
+  variants: {
+    type: {
+      admin: { color: 'red' }
+    }
+  }
+})
+```
+
+Here we just include all the dynamic parts ("variants") even if there is no element uses it. However, this might cause lots of size overheads, and sometimes impossible to get all possibilities (might depend on runtime data). But making your styles more "atomic" can help increase the reuse rate here.
+
+#### CSS Files
+
+CSS files are static. We can know all all of them beforehand, and always put them inside `<head>` so it won't has this problem. However, there're also endless discussions around pros and cons between CSS-in-JS and static CSS.
+
+#### Tailwind CSS and Similar Tools
+
+Things like Tailwind can detect all possible styles (PurgeCSS) used in the application at build time too. And when rendering, the styles are already static. It's another atomic solution.
+
+#### Inlined Styles
+
+Things like `<div style={{ color: 'red' }}>` will always work with streaming as all the styles are attached to the node. It also has the ability to behave dynamically.
+
+The issue here is it can't be reusable, and can't handle pseudo classes, media queries, keyframes, etc.
+
+#### Inlined `<style>` Tags
+
+We can also render a `<style>` tag along with the element like:
+
+```html
+<style>.class-xyz{color:red}</style>
+<span class="class-xyz">vercel</span>
+```
+
+...rather than inserting it to `<head>`.
+
+Personally I think this will be a nice way to solve the problem. When there's another element with `.class-xyz` class, we don't have to inject the style tag again.
+
+**However**, it's `<style>` tags are not allowed to be inside `<body>` in the current [WHATWG HTML spec](https://html.spec.whatwg.org/multipage/semantics.html#the-style-element).
+
+## Conclusion
+
+It's hard to get a conclusion from this, just one personal take: static is the path to optimizations in a highly dynamic system.
+
+Static = { static, static analyzable, immutability, purity }  
+Optimizations = { mental load, software performance, architecture simplicity }
