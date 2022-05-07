@@ -1,6 +1,6 @@
 ---
 title: The Best Things
-date: 2019/7/15
+date: 2019/07/15
 tag: list of things
 description: A list of the best things. Carefully chosen.
 ---

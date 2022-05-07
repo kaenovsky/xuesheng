@@ -1,6 +1,6 @@
 ---
 title: On UI Animations
-date: 2020/5/27
+date: 2020/05/27
 author: Shu
 tag: code, design
 description: Some unpolished quick notes on when and how we should design and use UI animations in a web application.
