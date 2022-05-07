@@ -1,6 +1,6 @@
 ---
 title: COVID, BTC, M1
-date: 2021/1/9
+date: 2021/01/09
 description: The 3 things that changed the way I think during 2020.
 tag: diary
 author: Shu
