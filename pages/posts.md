@@ -20,8 +20,8 @@ export function BlogIndex({ more = "Read more" }) {
     return (
       <div key={page.route} className="mb-10">
         <Link href={page.route}>
-          <A style={{ color: "inherit", textDecoration: "none" }} className="block font-semibold mt-8 text-2xl flex items-center">
-            <H3 className="flex-1 m-0 post-link">{page.meta?.title || page.frontMatter?.title || page.name}</H3>
+          <A style={{ color: "inherit", textDecoration: "none" }} className="post-link block font-semibold mt-8 text-2xl flex">
+            <H3 className="flex-1 m-0 post-title">{page.meta?.title || page.frontMatter?.title || page.name}</H3>
             <time className="opacity-50 text-sm date">{page.frontMatter.date}</time>
           </A>
         </Link>
