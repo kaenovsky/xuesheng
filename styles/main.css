@@ -53,8 +53,10 @@ strong {
 }
 
 .post-link {
-  margin: 0.3rem 1rem;
   align-items: baseline;
+}
+.post-title {
+  margin: 0.3rem 1rem;
   margin-left: 0;
   font-size: 1.1rem;
   font-weight: 500;
