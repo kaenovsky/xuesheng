@@ -55,7 +55,7 @@ strong {
 }
 
 .post-link {
-  margin: 0.3rem;
+  margin: 0.3rem 1rem;
   margin-left: 0;
   font-size: 1.1rem;
   font-weight: 500;
@@ -172,13 +172,12 @@ img.next-image {
 article.prose pre {
   background-color: #f7f7f7 !important;
   letter-spacing: 0;
-  font-size: 0.95rem;
 }
 article.prose pre code {
   display: inline-block;
   padding: 0;
   color: #545454;
-  font-size: 0.9em;
+  font-size: .9em;
 }
 
 .dark .dark\:prose-dark pre {
