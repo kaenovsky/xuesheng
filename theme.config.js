@@ -1,6 +1,25 @@
 const YEAR = new Date().getFullYear()
 
 export default {
+  head: ({ meta }) => {
+    return (
+      <>
+        <meta name="author" content="Shu Ding" />
+        <link rel="canonical" href="https://shud.in" />
+        <meta name="title" content={meta.title} />
+        <meta property="description" content={meta.description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={meta.title} />
+        <meta property="og:description" content={meta.description} />
+        <meta property="og:url" content="https://shud.in" />
+        <meta property="twitter:card" content="summary" />
+        <meta property="twitter:site" content="@shuding_" />
+        <meta property="twitter:title" content={meta.title} />
+        <meta property="twitter:description" content={meta.description} />
+        <meta property="twitter:url" content="https://shud.in" />
+      </>
+    )
+  },
   footer: (
     <div>
       <hr />

@@ -2,6 +2,7 @@
 type: page
 title: Thoughts
 date: 2020-01-03
+description: Thoughts on life, work, and everything else.
 ---
 
 # Thoughts

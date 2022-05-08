@@ -42,19 +42,19 @@ function User() {
 }
 ```
 
-The application renders **“Hello, <span style={{ color: 'red' }}>John Doe</span>”** as the heading, the name will be in red because it matches the `type: 'admin'{:js}` variant.
+The application renders **“Hello, <span style={{ color: 'red' }}>John Doe</span>”** as the heading, the name will be in red because it matches the `type: 'admin'` variant.
 
 ## Server-Side Rendering
 
 During SSR, Next.js:
 
-1. Renders the page to a string (`ReactDOMServer.renderToString(<Page/>){:js}`). This gives us a result like:
+1. Renders the page to a string (`ReactDOMServer.renderToString(<Page/>)`). This gives us a result like:
 
 ```jsx
 <h1>Hello, <span className="stitches-xyz stitches-xyz-type-admin">John Doe</span></h1>
 ```
 
-2. From step 1., Stitches **knows** which components were rendered, what styles were used and what classname/variant hashes (in our case, `"stitches-xyz stitches-xyz-type-admin"{:js}`) were generated.
+2. From step 1., Stitches **knows** which components were rendered, what styles were used and what classname/variant hashes (in our case, `"stitches-xyz stitches-xyz-type-admin"`) were generated.
 3. Next.js then renders the HTML “shell” element (page/_document.js):
 
 ```jsx
@@ -70,7 +70,7 @@ During SSR, Next.js:
 </Html>
 ```
 
-4. Since Stitches already knows which CSS rules are used (as step 2.), it can then return it via `getCssText(){:js}`. And the rendered HTML string will look like:
+4. Since Stitches already knows which CSS rules are used (as step 2.), it can then return it via `getCssText()`. And the rendered HTML string will look like:
 
 ```html
 <html lang="en">
@@ -90,18 +90,18 @@ During SSR, Next.js:
 </html>
 ```
 
-5. Then, Next.js replaces `__PLACEHOLDER__{:js}` above with the rendered app content from step 1.: `<h1>Hello, <span className="stitches-xyz stitches-xyz-type-admin">John Doe</span></h1>{:html}`. Now everything is finished and all styles are server-side rendered.
+5. Then, Next.js replaces `__PLACEHOLDER__` above with the rendered app content from step 1.: `<h1>Hello, <span className="stitches-xyz stitches-xyz-type-admin">John Doe</span></h1>`. Now everything is finished and all styles are server-side rendered.
 6. Send the result to the browser.
 
-Similarly, if the user isn’t an admin, the output won’t contain `"stitches-xyz-type-admin"{:js}` and corresponding CSS rules.
+Similarly, if the user isn’t an admin, the output won’t contain `"stitches-xyz-type-admin"` and corresponding CSS rules.
 
-This 2-pass rendering strategy ensures that all the needed information inside the page `<body>{:html}` will be collected, and will then be inserted into the page `<head>{:html}`.
+This 2-pass rendering strategy ensures that all the needed information inside the page `<body>` will be collected, and will then be inserted into the page `<head>`.
 
 ## Streaming
 
 Unlike the final step above which sends everything to the browser all together, “streaming” means the HTML will be intentionally sent to the client piece by piece. The client can render the recieved parts while the server is still working on the remaining parts.
 
-With the same example, if we use [Suspense](https://reactjs.org/docs/react-api.html#reactsuspense) to fetch `user{:js}` and enable streaming (`ReactDOMServer.renderToReadableStream{:js}`) in SSR:
+With the same example, if we use [Suspense](https://reactjs.org/docs/react-api.html#reactsuspense) to fetch `user` and enable streaming (`ReactDOMServer.renderToReadableStream`) in SSR:
 
 ```jsx
 // page.jsx
@@ -139,11 +139,11 @@ function User() {
 
 ...then it becomes more tricky to render the correct styles.
 
-To render all necessary styles inside `<head>{:html}`, we have to render the **full content** of `<body>{:html}` first. However, we need to send `<head>{:html}` before `<body>{:html}` in the HTML response. This results in a conflict in the order which makes it impossible to do streaming.
+To render all necessary styles inside `<head>`, we have to render the **full content** of `<body>` first. However, we need to send `<head>` before `<body>` in the HTML response. This results in a conflict in the order which makes it impossible to do streaming.
 
-The solution is to give up the idea of putting all the styles in `<head>{:html}`:
+The solution is to give up the idea of putting all the styles in `<head>`:
 
-1. Instead, we directly render the **full** page, which including the “shell” to the stream. And there is no `<head>{:html}` anymore:
+1. Instead, we directly render the **full** page, which including the “shell” to the stream. And there is no `<head>` anymore:
 
 ```jsx
 ReactDOMServer.renderToReadableStream(
@@ -163,7 +163,7 @@ ReactDOMServer.renderToReadableStream(
 <html lang="en"><body><div id="_next"><h1>Hello, 
 ```
 
-3. Then, React hits the Suspense boundary. So it appends the fallback `<div id="suspense-1-fallback">loading...</div>{:html}` to the stream, and waits for the data to resolve. At this point the user can already see “Hello, loading...” showing on their screen because the browser now receives:
+3. Then, React hits the Suspense boundary. So it appends the fallback `<div id="suspense-1-fallback">loading...</div>` to the stream, and waits for the data to resolve. At this point the user can already see “Hello, loading...” showing on their screen because the browser now receives:
 
 ```html
 <html lang="en"><body><div id="_next"><h1>Hello, 
@@ -172,7 +172,7 @@ ReactDOMServer.renderToReadableStream(
 
 4. (Waiting)
 
-5. ...finally, `readUser(){:js}` finishes and the Suspense boundary resolves. React can render the actual data, but also it needs to replace the fallback element with the data. However, the fallback is already sent to the browser. As a result, what React can do is to first append the content to the stream, with the `hidden` attribute: 
+5. ...finally, `readUser()` finishes and the Suspense boundary resolves. React can render the actual data, but also it needs to replace the fallback element with the data. However, the fallback is already sent to the browser. As a result, what React can do is to first append the content to the stream, with the `hidden` attribute: 
 
 ```html
 <div hidden id="suspense-1-content">
@@ -182,7 +182,7 @@ ReactDOMServer.renderToReadableStream(
 
 It needs to be `hidden` because otherwise, at this momenet both fallback and content will be displayed.
 
-Do you remember that we are no longer injecting styles into `<head>{:html}`? Since we already rendered the resolved content, the CSS-in-JS library _can_ know which styles are generated, and we can inject these styles as an inlined `<style>{:html}` tag into the stream too:
+Do you remember that we are no longer injecting styles into `<head>`? Since we already rendered the resolved content, the CSS-in-JS library _can_ know which styles are generated, and we can inject these styles as an inlined `<style>` tag into the stream too:
 
 ```html
 <style>
@@ -248,9 +248,9 @@ Which is totally valid. Browser receives and executes each chunk in order.
 
 As you might already noticed, there are a couple of downsides of this approach:
 
-- You’ll need to put `<style>{:html}` tags inside `<body>{:html}`, which is not recommended in the WHATWG spec.
+- You’ll need to put `<style>` tags inside `<body>`, which is not recommended in the WHATWG spec.
 - CSS can’t be extracted out from the HTML (as .css files) and shared/cached between different pages.
 
-But there are other solutions too. If we can know all the **possible** styles before rendering `<Page/>{:jsx}`, we can avoid the two problems above. The old way of writing fully static CSS files is still great. Or something in the middle, such as Tailwind CSS or similar tools, to collect necessary styles at build time so you also have some flexibility.
+But there are other solutions too. If we can know all the **possible** styles before rendering `<Page/>`, we can avoid the two problems above. The old way of writing fully static CSS files is still great. Or something in the middle, such as Tailwind CSS or similar tools, to collect necessary styles at build time so you also have some flexibility.
 
 As always, we get more power by adding more dynamism, with a cost.
