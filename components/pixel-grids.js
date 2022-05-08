@@ -52,13 +52,14 @@ export const PixelGrids = ({ size, scale = 1, header = true, fn }) => {
           text-align: center;
           padding: 1rem 0.5rem;
           font-feature-settings: "dlig", "kern", "frac", "ss01";
+          --grid-border: #d6d6d6;
         }
         .screen {
           display: inline-block;
           margin-left: ${negQuarterDisplaySize};
           ${header
             ? ""
-            : `border-top: 1px solid #ddd; border-left: 1px solid #ddd;`}
+            : `border-top: 1px solid var(--grid-border); border-left: 1px solid var(--grid-border);`}
         }
         .row,
         .header {
@@ -70,8 +71,8 @@ export const PixelGrids = ({ size, scale = 1, header = true, fn }) => {
           flex: 0 0 ${displaySize};
           width: ${displaySize};
           height: ${displaySize};
-          border-right: 1px solid #ddd;
-          border-bottom: 1px solid #ddd;
+          border-right: 1px solid var(--grid-border);
+          border-bottom: 1px solid var(--grid-border);
           display: flex;
           place-content: center;
           place-items: center;

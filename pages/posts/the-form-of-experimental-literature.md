@@ -2,7 +2,6 @@
 title: 实验文学的形式
 date: 2020/01/14
 author: Shu
-tag: diary, list of things
 description: 记录一些让我印象深刻的实验文学作品及其他。
 ---
 

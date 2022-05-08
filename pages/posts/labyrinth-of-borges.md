@@ -1,7 +1,6 @@
 ---
 title: 走入博尔赫斯的迷宫
 date: 2020/06/07
-tag: diary, dream
 author: Shu
 description: 记录一个梦。
 ---

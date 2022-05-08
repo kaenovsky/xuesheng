@@ -1,7 +1,6 @@
 ---
 title: From Shader to Metaball, Part Ⅰ
 date: 2021/08/28
-tag: code
 author: Shu
 description: Let’s talk about shaders this time.
 ---
@@ -23,6 +22,7 @@ import Head from "next/head"
 I started getting into creative coding since COVID-19 (you can find some of them [here](https://works.shud.in/creative-coding)). [Two months ago](https://twitter.com/shuding_/status/1414325136375877642) I did some research on visualizing randomly generated metaballs, and here’s what I got as the result:
 
 <div style={{ paddingBottom: "56.25%", position: "relative" }}>
+  <div style={{}}/>
   <video
     src="/images/metaballs.mp4"
     autoPlay
@@ -33,7 +33,7 @@ I started getting into creative coding since COVID-19 (you can find some of them
   />
 </div>
 
-I also deployed it to [metaballs.vercel.app](https://metaballs.vercel.app), so you can play around with it.
+_[metaballs.vercel.app](https://metaballs.vercel.app)_
 
 In the meantime a lot of people have reached out to me about the tech details, and I think it might be fun to write about it. So in my following blog posts I’ll share how you can create the same thing, without too much knowledge about computer graphics.
 
@@ -45,7 +45,7 @@ What are shaders? You probably already knew the [tixy.land](https://tixy.land) w
 
 > Control the size and color of a 16x16 dot matrix with a single JavaScript function.
 
-The `tixy` function, is _almost_ a fragment shader. _It takes the coordinates of a screen pixel and returns the corresponding color of that pixel_. In short, it’s a “`(x, y) => color`” function.
+The `tixy` function, is _almost_ a fragment shader. _It takes the coordinates of a screen pixel and returns the corresponding color of that pixel_. In short, it’s a “`(x, y) => color{:js}`” function.
 
 Of course you can also pass other parameters to the shader, such as mouse position, time, window size, etc. But overall this is a simple and powerful concept. Hundreds of beautiful animations were created with it, you can find them from that [Twitter thread](https://twitter.com/aemkei/status/1323399877611708416) (and [here](https://twitter.com/shuding_/status/1324763353533698049) is mine).
 
@@ -85,7 +85,7 @@ Since the return number represents the brightness of that pixel, the entire scre
   }}
 />
 
-So, we’ve created a simple gradient shader. Now if we change the shader function to return `(x+y)/2` instead of just `x`, you will get this (think about it!):
+So, we’ve created a simple gradient shader. Now if we change the shader function to return `(x + y) / 2{:js}` instead of just `x{:js}`, you will get this (think about it!):
 
 <PixelGrids
   size={8}
