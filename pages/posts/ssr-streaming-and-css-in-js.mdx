@@ -8,9 +8,9 @@ author: Shu
 
 # SSR, Streaming, and CSS-in-JS
 
-How does [CSS-in-JS](https://en.wikipedia.org/wiki/CSS-in-JS) exactly work with [Server-Side Rendering (SSR)](https://web.dev/rendering-on-the-web/), and [streaming SSR](https://github.com/reactwg/react-18/discussions/37)? Let's take [Next.js](https://nextjs.org) and [Stitches](https://stitches.dev) as an example and dive into the details in this article. Note that this is not targeting a specific framework or library, it's a general architecture discussion.
+How does [CSS-in-JS](https://en.wikipedia.org/wiki/CSS-in-JS) exactly work with [Server-Side Rendering (SSR)](https://web.dev/rendering-on-the-web/), and [streaming SSR](https://github.com/reactwg/react-18/discussions/37)? Let's take [Next.js](https://nextjs.org) and [Stitches](https://stitches.dev) as an example and dive into the details in this article. Note that this is not specifically about one framework or library, but a general discussion.
 
-Say you have these two components to render a simple page, and it uses a CSS-in-JS library to style the content:
+Say you have these two components to render a simple page, and you use CSS-in-JS to style the content:
 
 ```jsx
 // page.jsx
@@ -43,7 +43,7 @@ function User() {
 }
 ```
 
-This application renders **“Hello, <span style={{ color: 'red' }}>John Doe</span>”** as the heading, the user name will be in red because it matches the `type: 'admin'{:js}` variant.
+The application renders **“Hello, <span style={{ color: 'red' }}>John Doe</span>”** as the heading, the name will be in red because it matches the `type: 'admin'{:js}` variant.
 
 ## Server-Side Rendering
 
@@ -56,7 +56,7 @@ During SSR, Next.js:
 ```
 
 2. From step 1., Stitches **knows** which components were rendered, what styles were used and what classname/variant hashes (in our case, `"stitches-xyz stitches-xyz-type-admin"{:js}`) were generated.
-3. Next.js renders the HTML “shell” element (page/_document.js):
+3. Next.js then renders the HTML “shell” element (page/_document.js):
 
 ```jsx
 <Html lang="en">
@@ -71,7 +71,7 @@ During SSR, Next.js:
 </Html>
 ```
 
-4. Since Stitches already knows which CSS rules are used (as step 2.), it can then return it via `getCssText(){:js}`. And the rendered result will look like:
+4. Since Stitches already knows which CSS rules are used (as step 2.), it can then return it via `getCssText(){:js}`. And the rendered HTML string will look like:
 
 ```html
 <html lang="en">
@@ -91,7 +91,7 @@ During SSR, Next.js:
 </html>
 ```
 
-5. In the previous step, Next.js replaces `__PLACEHOLDER__{:js}` above with the rendered app content in step 1.: `<h1>Hello, <span className="stitches-xyz stitches-xyz-type-admin">John Doe</span></h1>{:html}`. Now everything is finished and all styles are server-side rendered.
+5. Then, Next.js replaces `__PLACEHOLDER__{:js}` above with the rendered app content from step 1.: `<h1>Hello, <span className="stitches-xyz stitches-xyz-type-admin">John Doe</span></h1>{:html}`. Now everything is finished and all styles are server-side rendered.
 6. Send the result to the browser.
 
 Similarly, if the user isn’t an admin, the output won’t contain `"stitches-xyz-type-admin"{:js}` and corresponding CSS rules.
@@ -100,7 +100,7 @@ This 2-pass rendering strategy ensures that all the needed information inside th
 
 ## Streaming
 
-Unlike the last step above which sends everything to the browser all together, “streaming” means the HTML will be intentionally sent to the client piece by piece. The client can render the recieved parts while the server is still working on the remaining parts.
+Unlike the final step above which sends everything to the browser all together, “streaming” means the HTML will be intentionally sent to the client piece by piece. The client can render the recieved parts while the server is still working on the remaining parts.
 
 With the same example, if we use [Suspense](https://reactjs.org/docs/react-api.html#reactsuspense) to fetch `user{:js}` and enable streaming (`ReactDOMServer.renderToReadableStream{:js}`) in SSR:
 
