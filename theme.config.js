@@ -17,6 +17,7 @@ export default {
         <meta property="twitter:title" content={meta.title} />
         <meta property="twitter:description" content={meta.description} />
         <meta property="twitter:url" content="https://shud.in" />
+        <meta property="twitter:image" content="https://shud.in/logo.png" />
       </>
     )
   },

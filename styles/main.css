@@ -3,7 +3,7 @@
   font-style: normal;
   font-weight: 100 900;
   font-display: block;
-  src: url(/fonts/InterDisplay.var.woff2) format("woff2");
+  src: url(/fonts/InterDisplay-roman.var.woff2) format("woff2");
 }
 
 html.dark body {
@@ -102,6 +102,7 @@ h1 {
 
 .prose {
   line-height: 1.6;
+  word-spacing: -0.04em;
   max-width: 40rem;
 }
 
