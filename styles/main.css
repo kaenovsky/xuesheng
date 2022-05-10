@@ -2,7 +2,7 @@
   font-family: "Inter var";
   font-style: normal;
   font-weight: 100 900;
-  font-display: block;
+  font-display: fallback;
   src: url(/fonts/InterDisplay.var.woff2) format("woff2");
 }
 
@@ -102,6 +102,7 @@ h1 {
 
 .prose {
   line-height: 1.6;
+  max-width: 40rem;
 }
 
 .post-item-more {
@@ -193,4 +194,33 @@ article.prose pre code {
 }
 .dark .dark\:prose-dark blockquote {
   border-left-color: #4b4f50;
+}
+
+:root {
+  --shiki-color-text: #414141;
+  --shiki-color-background: transparent;
+  --shiki-token-constant: #1976d2;
+  --shiki-token-string: #22863a;
+  --shiki-token-comment: #aaa;
+  --shiki-token-keyword: #d32f2f;
+  --shiki-token-parameter: #ff9800;
+  --shiki-token-function: #6f42c1;
+  --shiki-token-string-expression: #22863a;
+  --shiki-token-punctuation: #212121;
+  --shiki-token-link: #22863a;
+  --nextra-shiki-deleted: red;
+  --nextra-shiki-inserted: red;
+}
+
+.dark {
+  --shiki-color-text: #d1d1d1;
+  --shiki-token-constant: #79b8ff;
+  --shiki-token-string: #ffab70;
+  --shiki-token-comment: #6b737c;
+  --shiki-token-keyword: #f97583;
+  --shiki-token-parameter: #ff9800;
+  --shiki-token-function: #b392f0;
+  --shiki-token-string-expression: #4bb74a;
+  --shiki-token-punctuation: #bbb;
+  --shiki-token-link: #ffab70;
 }

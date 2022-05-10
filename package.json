@@ -10,7 +10,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "devjar": "^0.1.0",
     "gray-matter": "^4.0.2",
     "next": "12.1.6",
     "nextra": "2.0.0-alpha.49",
