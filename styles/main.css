@@ -211,6 +211,7 @@ article.prose pre code {
   --shiki-token-link: #22863a;
   --nextra-shiki-deleted: red;
   --nextra-shiki-inserted: red;
+  --card-bg: #f3f3f3;
 }
 
 .dark {
@@ -224,12 +225,13 @@ article.prose pre code {
   --shiki-token-string-expression: #4bb74a;
   --shiki-token-punctuation: #bbb;
   --shiki-token-link: #ffab70;
+  --card-bg: #212424;
 }
 
 a.insite-card {
   padding: 1rem;
   border-radius: 0.5rem;
-  background-color: #f3f3f3;
+  background-color: var(--card-bg);
   flex: 0 0 calc(50% - 0.5rem);
   text-decoration: none;
 }
