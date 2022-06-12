@@ -2,7 +2,7 @@
 type: page
 title: Insites
 date: 2020-01-03
-description: Insights.
+description: Interesting, inspirational, insightful interfaces and interactions. By Shu Ding.
 ---
 
 # Insites
