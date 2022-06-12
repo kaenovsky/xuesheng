@@ -23,6 +23,6 @@ export function Insite({ title, url, description }) {
 
 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
   <Insite title="CSS-Only Dino Game" url="/insites/dino.html" description="A trick to reflect document state from CSS animations (Chrome only)." />
-  <Insite title="Deutsch.css" url="/insites/deutsch-css" description="Translate any website into Deutsch." />
-  <Insite title="Void" url="/insites/void" description="An interactive game (desktop only)." />
+  <Insite title="Deutsch.css" url="/insites/deutsch-css" description="Translate any website into Deutsch (Chrome only)." />
+  <Insite title="Void" url="/insites/void" description="An interactive game without any pixels (desktop only)." />
 </div>
