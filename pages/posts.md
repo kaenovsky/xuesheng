@@ -1,12 +1,11 @@
 ---
 type: page
 title: Thoughts
-date: 2020-01-03
+date: 2020-01-04
 description: Thoughts on life, work, and everything else.
 ---
 
 # Thoughts
-
 
 import { getPagesUnderRoute } from "nextra/context";
 import Link from "next/link";

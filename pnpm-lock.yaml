@@ -1,19 +1,21 @@
 lockfileVersion: 5.3
 
 specifiers:
+  canvas-confetti: ^1.5.1
   gray-matter: ^4.0.2
   next: 12.1.6
-  nextra: 2.0.0-alpha.49
-  nextra-theme-blog: 2.0.0-alpha.49
+  nextra: 2.0.0-alpha.56
+  nextra-theme-blog: 2.0.0-alpha.55
   react: ^18.1.0
   react-dom: ^18.1.0
   rss: ^1.2.2
 
 dependencies:
+  canvas-confetti: 1.5.1
   gray-matter: 4.0.3
   next: 12.1.6_react-dom@18.1.0+react@18.1.0
-  nextra: 2.0.0-alpha.49_react@18.1.0
-  nextra-theme-blog: 2.0.0-alpha.49_d30c2367b03c877b70a67c330200ac54
+  nextra: 2.0.0-alpha.56_react@18.1.0
+  nextra-theme-blog: 2.0.0-alpha.55_d30c2367b03c877b70a67c330200ac54
   react: 18.1.0
   react-dom: 18.1.0_react@18.1.0
   rss: 1.2.2
@@ -383,6 +385,10 @@ packages:
 
   /caniuse-lite/1.0.30001334:
     resolution: {integrity: sha512-kbaCEBRRVSoeNs74sCuq92MJyGrMtjWVfhltoHUCW4t4pXFvGjUBrfo47weBRViHkiV3eBYyIsfl956NtHGazw==}
+    dev: false
+
+  /canvas-confetti/1.5.1:
+    resolution: {integrity: sha512-Ncz+oZJP6OvY7ti4E1slxVlyAV/3g7H7oQtcCDXgwGgARxPnwYY9PW5Oe+I8uvspYNtuHviAdgA0LfcKFWJfpg==}
     dev: false
 
   /ccount/2.0.1:
@@ -796,7 +802,7 @@ packages:
     dev: false
 
   /mdurl/1.0.1:
-    resolution: {integrity: sha1-/oWy7HWlkDfyrf7BAP1sYBdhFS4=}
+    resolution: {integrity: sha512-/sKlQJCBYVY9Ers9hqzKou4H6V5UWc/M59TH2dvkt+84itfnq7uFOMLpOiOS4ujvHP4etln18fmIxA5R5fll0g==}
     dev: false
 
   /micromark-core-commonmark/1.0.6:
@@ -1212,8 +1218,8 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-blog/2.0.0-alpha.49_d30c2367b03c877b70a67c330200ac54:
-    resolution: {integrity: sha512-6AuFNPBihY7A1aGqeK9lg+663N+4nCEpfOPKvpu0tTnZf946i0E4Uh71OjPK16rorSbICF05+QnCayciA4CHdA==}
+  /nextra-theme-blog/2.0.0-alpha.55_d30c2367b03c877b70a67c330200ac54:
+    resolution: {integrity: sha512-UZoNDqCGvUU5fclz491r1TjN4gwmntsr71Lex3J5coaq/5PdHor3welM/TU6T+0rmuhVBd4v4kxuFETLHT6+Ug==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
@@ -1228,8 +1234,8 @@ packages:
       react-dom: 18.1.0_react@18.1.0
     dev: false
 
-  /nextra/2.0.0-alpha.49_react@18.1.0:
-    resolution: {integrity: sha512-dR52NUOH7amYQeRsQ0lENPjDrnx41NTmKMImAQQ9Nlx/PVBzEmdRo/bnX3GLIYeDWPt7pgzOoDhHRyMt04VdVw==}
+  /nextra/2.0.0-alpha.56_react@18.1.0:
+    resolution: {integrity: sha512-U6vFoUj4Oc+Px9WyNOUJWdta6j8B+dKtjbWvE1jCoz9wdAARtWxIZknIEMK62yt94zZeUjJg5KCzj1HBZc6UpQ==}
     peerDependencies:
       react: '>=16.13.1'
     dependencies:
