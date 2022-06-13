@@ -229,7 +229,7 @@ article.prose pre code {
 }
 
 a.insite-card {
-  padding: 1rem;
+  padding: 0.8rem 1rem;
   border-radius: 0.5rem;
   background-color: var(--card-bg);
   flex: 0 0 calc(50% - 0.5rem);
