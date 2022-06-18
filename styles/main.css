@@ -137,8 +137,6 @@ article.prose code::after {
   content: none;
 }
 article.prose code {
-  font-weight: normal;
-  padding: 0 0.1em;
   border: none;
   padding: 2px 4px;
   font-weight: 500;
