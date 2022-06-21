@@ -26,4 +26,5 @@ export function Insite({ title, url, description }) {
   <Insite title="Deutsch.css" url="/insites/deutsch-css" description="Translate any website into Deutsch (Chrome only)." />
   <Insite title="Void" url="/insites/void" description="An empty canvas (desktop only)." />
   <Insite title="Void II" url="/insites/void-ii" description="Another empty canvas (desktop only)." />
+  <Insite title="Primes.css" url="/insites/primes-css" description="Finding primes with CSS." />
 </div>
