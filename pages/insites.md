@@ -2,12 +2,12 @@
 type: page
 title: Insites
 date: 2020-01-03
-description: Interesting, inspirational, insightful interfaces and interactions. By Shu Ding.
+description: Interesting, inspirational, insightful interfaces, interactions and innovations. By Shu Ding.
 ---
 
 # Insites
 
-Interesting, inspirational, insightful interfaces and interactions.
+Interesting, inspirational, insightful interfaces, interactions, and innovations.
 
 export function Insite({ title, url, description }) {
   const H3 = 'h3'
