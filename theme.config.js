@@ -24,20 +24,8 @@ export default {
   footer: (
     <div>
       <hr />
-      <a href="https://twitter.com/shuding_" target="_blank">
-        Twitter
-      </a>{" "}
-      ·{" "}
-      <a href="https://github.com/shuding" target="_blank">
-        GitHub
-      </a>{" "}
-      ·{" "}
-      <a href="https://instagram.com/_shuding" target="_blank">
-        Instagram
-      </a>{" "}
-      ·{" "}
-      <a href="mailto:g@shud.in" target="_blank">
-        g@shud.in
+      <a href="mailto:nihao@chinobasico.ar" target="_blank">
+        nihao@chinobasico.ar
       </a>
       <small style={{ display: "block", marginTop: "8rem" }}>
         <abbr
